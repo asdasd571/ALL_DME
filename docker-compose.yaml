@@ -1,0 +1,57 @@
+services:
+  nak_reg:
+    build:
+      context: ./nak_reg
+    container_name: nak_reg
+    expose:
+      - "5001"
+    networks:
+      - app_network
+
+  nak_discovery:
+    build:
+      context: ./nak_discovery
+    container_name: nak_discovery
+    expose:
+      - "33333"
+    ports:
+    - "33333:33333"
+    networks:
+      - app_network
+
+  nak_access:
+    build:
+      context: ./nak_access
+    container_name: nak_access
+    expose:
+      - "5005"
+    networks:
+      - app_network
+
+  nak_offer:
+    build:
+      context: ./nak_offer
+    container_name: nak_offer
+    expose:
+      - "5002"
+    networks:
+      - app_network
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - nak_reg
+      - nak_discovery
+      - nak_access
+      - nak_offer
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge

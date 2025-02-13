@@ -1,0 +1,239 @@
+openapi: 3.0.3
+info:
+  title: 'Data access service'
+  version: 2.0.0-alpha.1
+  description: |
+    API for Data access service.
+    © 2024, O-RAN ALLIANCE.
+    All rights reserved.
+externalDocs:
+  description: 'O-RAN.WG2.R1AP-v06.00'
+  url: 'https://www.o-ran.org/specifications'
+servers:
+  - url: '{apiRoot}/data-access/v1/{apiConsumerId}'
+    variables:
+      apiRoot:
+        description: 'apiRoot as defined in clause 5.3 in O-RAN.WG2.R1AP'
+        default: 'https://example.com'
+      apiConsumerId:
+        description: 'Identifier of the API consumer '
+        default: ''
+paths:
+  '/data-jobs':
+    post:
+      description: 'To create a data job'
+      tags:
+      - Create all data jobs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataJobInfo'
+      responses:
+        '201':
+          description: 'Success case 201 created'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataJobInfo'
+          headers:
+            Location:
+              description: 'Contains the URI of the newly created resource'
+              required: true
+              schema:
+               type: string
+        '400':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/400'
+        '401':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/401'
+        '403':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/403'
+        '404':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/404'
+        '405':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/405'
+        '409':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/409'
+        '413':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/413'
+        '415':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/415'
+        '429':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/429'
+        '500':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/500'
+        '502':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/502'
+        '503':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/503'
+      callbacks:
+        DataAvailabilityNotification:
+          '{$request.body.dataAvailabilityNotificationUri}':
+           post:
+            description: 'Notification on the availability of requested data'
+            requestBody:
+              required: true
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/DataAvailabilityNotification'
+            responses:
+              '204':
+                description: 'The notification was delivered'
+              '400':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/400'
+              '401':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/401'
+              '403':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/403'
+              '404':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/404'
+              '429':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/429'
+              '500':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/500'
+              '502':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/502'
+              '503':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/503'  
+  '/data-jobs/{dataJobId}':
+    parameters:
+      - name: dataJobId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/dataJobId'
+    delete:
+      description: 'To delete the created data job'
+      tags:
+      - Individual data job
+      responses:
+        '204':
+          description: 'The data job was deleted'
+        '400':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/400'
+        '401':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/401'
+        '403':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/403'
+        '404':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/404'
+        '429':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/429'
+        '500':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/500'
+        '502':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/502'
+        '503':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/503'
+components:
+  schemas:
+    DeliveryMethod:
+      type: string
+      enum:
+        - HTTP
+        - Kafka
+        - MQTT
+    dataJobId:
+      description: 'A successful created data job is identified by dataJobId '
+      type: string
+    DataJobInfo:
+      description: 'Information related to a data job'
+      allOf:
+        - type: object
+          properties:
+            dataDeliveryMode:
+              $ref: '#/components/schemas/DataDeliveryMode'
+            dmeTypeId:
+              $ref: 'file://YAML/O-RAN.WG2.R1AP_DataDiscovery.yaml#/components/schemas/dmetypeId'
+            productionJobDefinition:
+              description: 'Job description based on the DME type specific dataProductionSchema'
+              type: object
+            dataDeliveryMethod:
+              $ref: '#/components/schemas/DeliveryMethod'
+            dataDeliverySchemaId:
+              description: 'A delivery schema identifier provided by a Data Producer during the data registration procedure'
+              type: string
+          required: [dataDeliveryMode, dmeTypeId, productionJobDefinition, dataDeliveryMethod, dataDeliverySchemaId]
+        - type: object
+          oneOf:
+            - properties:
+                pullDeliveryDetailsHttp:
+                  $ref: '#/components/schemas/PullDeliveryDetailsHttp'
+              required: [pullDeliveryDetailsHttp]
+            - properties:
+                dataAvailabilityNotificationUri:
+                  $ref: 'O-RAN.WG2.R1AP_Common.yaml#/components/schemas/Uri'
+              required: [dataAvailabilityNotificationUri]
+            - properties:
+                pushDeliveryDetailsHttp:
+                  $ref: '#/components/schemas/PushDeliveryDetailsHttp'
+              required: [pushDeliveryDetailsHttp]
+            - properties:
+                streamingConfigurationKafka:
+                  $ref: '#/components/schemas/StreamingConfigurationKafka'
+              required: [streamingConfigurationKafka]
+    DataDeliveryMode:
+      description: 'This indicates whether the data instance is created in a one-time data delivery (data request) or continuously (data subscription)'
+      type: string
+      enum:
+        - ONE_TIME
+        - CONTINUOUS
+    DataDeliveryMethod:
+      description: 'This indicates supported delivery method'
+      type: string
+      enum:
+        - PULL_HTTP
+        - PUSH_HTTP
+        - STREAMING_KAFKA
+    PullDeliveryDetailsHttp:
+      description: 'The PullDeliveryDetailsHttp data type signals how to pull data using the HTTP protocol.'
+      readOnly: true
+      type: object
+      properties:
+        dataPullUri:
+          $ref: 'O-RAN.WG2.R1AP_Common.yaml#/components/schemas/Uri'
+      required: [dataPullUri]
+    PushDeliveryDetailsHttp:
+      description: 'The PushDeliveryDetailsHttp data type signals how to push data using the HTTP protocol.'
+      type: object
+      properties:
+        dataPushUri:
+          $ref: 'O-RAN.WG2.R1AP_Common.yaml#/components/schemas/Uri'
+      required: [dataPushUri]
+    StreamingConfigurationKafka:
+      description: 'The StreamingConfigurationKafka data type signals a data streaming configuration for the Kafka protocol.'
+      type: object
+      properties:
+        topicName:
+          description: 'Name of the Kafka topic'
+          type: string
+        kafkaBootstrapServers:
+          description: 'Server configuration'
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerAddressWithPort'
+      required: [topicName, kafkaBootstrapServers]
+    ServerAddressWithPort:
+      description: 'Server configuration'
+      type: object
+      properties:
+        hostname:
+          description: 'string identifying a hostname shall be formatted according to clause 2.3.1 as defined in IETF RFC 1035 [19]'
+          type: string      
+        portAddress:
+          description: 'Port address, e.g. 9092'
+          type: integer
+          minimum: 1
+          maximum: 65535
+      required: [hostname, portAddress]
+    DataAvailabilityNotification:
+      description: 'Avaibility of the data'
+      type: object
+      properties:
+        dataJobId:
+          description: 'data job identifier'
+          type: string
+        pullDeliveryDetailsHttp:
+          $ref: '#/components/schemas/PullDeliveryDetailsHttp'

@@ -1,0 +1,296 @@
+openapi: 3.0.3
+info:
+  title: 'Data registration service'
+  version: 2.0.0-alpha.1
+  description: |
+    API for Data registration service.
+    © 2024, O-RAN ALLIANCE.
+    All rights reserved.
+externalDocs:
+  description: 'O-RAN.WG2.R1AP-v06.00'
+  url: 'https://www.o-ran.org/specifications'
+servers:
+  - url: '{apiRoot}/data-registration/v2/ {apiConsumerId}'
+    variables:
+      apiRoot:
+        description: 'apiRoot as defined in clause 5.3 in O-RAN.WG2.R1AP'
+        default: 'https://example.com'
+      apiConsumerId:
+        description: Identifier of the API consumer that registers its data production capabilities
+        default: ''
+paths:
+  '/production-capabilities':
+    post:
+      description: 'To register DME type production capabilities'
+      tags:
+      - Registered DME type production capabilities
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DmeTypeRelatedCapabilities'
+      responses:
+        '201':
+          description: 'Success case 201 created'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DmeTypeRelatedCapabilities'
+          headers:
+            Location:
+              description: 'Contains the URI of the newly created resource'
+              required: true
+              schema:
+               type: string
+        '400':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/400'
+        '401':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/401'
+        '403':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/403'
+        '404':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/404'
+        '405':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/405'
+        '409':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/409'
+        '413':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/413'
+        '415':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/415'
+        '429':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/429'
+        '500':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/500'
+        '502':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/502'
+        '503':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/503'
+
+  '/production-capabilities/{registrationId}':
+    parameters:
+      - name: registrationId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/registrationId'
+    put:
+      description: 'To update DME type production capabilities that it has previously registered'
+      tags:
+      - Individual registered DME type production capability
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DmeTypeRelatedCapabilities'
+      responses:
+        '200':
+          description: 'Success case 200 with updated information'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DmeTypeRelatedCapabilities'
+        '400':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/400'
+        '401':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/401'
+        '403':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/403'
+        '404':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/404'
+        '406':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/406'
+        '411':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/411'
+        '413':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/413'
+        '415':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/415'
+        '429':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/429'
+        '500':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/500'
+        '502':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/502'
+        '503':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/503'
+    get:
+      description: 'To query DME type production capabilities that it has previously registered'
+      tags:
+      - Individual registered DME type production capability
+      responses:
+        '200':
+          description: 'Success case 200 with queried information'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DmeTypeRelatedCapabilities'
+        '400':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/400'
+        '401':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/401'
+        '403':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/403'
+        '404':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/404'
+        '406':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/406'
+        '429':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/429'
+        '500':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/500'
+        '502':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/502'
+        '503':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/503'
+    delete:
+      description: 'To deregister DME type production capabilities'
+      tags:
+      - Individual registered DME type production capability
+      responses:
+        '204':
+          description: 'The registration was deleted'
+        '400':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/400'
+        '401':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/401'
+        '403':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/403'
+        '404':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/404'
+        '429':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/429'
+        '500':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/500'
+        '502':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/502'
+        '503':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/503'
+components:
+  schemas:
+   registrationId:
+     description: 'A successful registration identified by registrationId '
+     type: string
+   DmeTypeRelatedCapabilities:
+     description: 'Information related to the registration as producer of a DME type'
+     type: object
+     properties:
+       dmeTypeDefinition:
+         $ref: '#/components/schemas/DmeTypeDefinition'
+       constraints:
+         description: 'Formulates producer constraints or constraints applicable to the consumption related to the DME type based on the dataProductionSchema'
+         type: object
+       dataAccessEndpoint:
+         $ref: 'TS29222_CAPIF_Publish_Service_API.yaml#/components/schemas/InterfaceDescription'
+       dataDeliveryModes:
+        type: array
+        items: 
+          $ref: 'O-RAN.WG2.R1AP_DataAccess.yaml#/components/schemas/DataDeliveryMode'
+     required: [dmeTypeDefinition, dataDeliveryModes, dataAccessEndpoint]
+   DmeTypeDefinition:
+     description: 'Information of the DME type'
+     type: object
+     properties:
+       dmeTypeId:
+         $ref: '#/components/schemas/DmeTypeIdStruct'
+       metadata:
+         $ref: '#/components/schemas/Metadata'
+       dataProductionSchema:
+         type: object
+         description: 'Schema that defines the information necessary to formulate a data request or data subscription.   If this attribute is not present, the schema is assumed to be known from the DME type definition that is referenced by dmeTypeId'
+       dataDeliverySchemas:
+        description: 'List of delivery schemas supported by the producer for the DME type being registered.'
+        type: array
+        items: 
+          $ref: '#/components/schemas/DeliverySchema'
+       dataDeliveryMechanisms:
+        description: 'Defining the delivery mechanism supported by Data Producer '
+        type: array
+        items:
+          $ref: '#/components/schemas/DataDeliveryMechanism'
+     required: [“dmeTypeId“, “metadata“, “dataDeliverySchemas“, “dataDeliveryMechanisms“]
+   DmeTypeIdStruct:
+     description: 'Defining the attributes of DME type identifier'
+     type: object
+     properties:
+       namespace:
+         type: string
+         description: 'Indicating the entity responsible for the DME type definition.'
+       name:
+         type: string
+         description: 'Name of the DME type. The string can be any character except “:“ (colon)'
+         pattern: '^[^:]{1,}$'
+       version:
+         type: string
+         description: 'Version of the DME type. The versioning and allowed characters are according to SemVer [11]'
+     required: [“namespace“,“name“,“version“]
+   DeliverySchema:
+    description: 'Delivery schema for a DME type'
+    type: object
+    properties:
+       type:
+         $ref: '#/components/schemas/SchemaTypes'
+       deliverySchemaId:
+         type: string
+         description: A Data Producer may support one or more delivery schemas and for each supported schema type a delivery schema identifier is assigned. A Data Consumer uses this attribute while creating a data job and request to deliver the data using specific schema type which is identified by this attribute.
+       schema:
+         type: string
+         description: 'The schema serialized to string. If this attribute is not present, the schema is assumed to be known from the DME type definition that is referenced by dmeTypeId'
+    required: [“type“,“deliverySchemaId“]
+   DataDeliveryMechanism:
+     description: 'Defining the attributes of delivery mechanism supported'
+     type: object
+     properties:
+      dataDeliveryMethod:
+        description: 'Delivery Method supported'
+        ref: 'O-RAN.WG2.R1AP_DataAccess.yaml#/components/schemas/DataDeliveryMethod'
+      kafkaDeliveryConfiguration:
+        $ref: '#/components/schemas/KafkaDeliveryConfiguration'
+     required:
+     - dataDeliveryMethod
+     oneOf:
+      - required: [“kafkaDeliveryConfiguration“]
+   Metadata:
+     description: 'Metadata that can be used in discovering the DME type'
+     properties:
+       dataCategory:
+         description: 'Defines the category of the DME type e.g., PM counters'
+         type: array
+         items:
+          type: string
+         minItems: 1
+       rat:
+         description: 'Defines the radio access technology e.g., 5G'
+         type: array
+         items:
+          type: string
+         minItems: 1
+     required: [“dataCategory“]
+   SchemaTypes:
+     description: 'Type of the schema supported by Data Producers'
+     type: string
+     enum:
+      - JSON_SCHEMA
+      - XML_SCHEMA
+   KafkaDeliveryConfiguration:
+     description: 'These configuration will be applied if KAFKA_DATA_STREAM is selected as delivery method'
+     type: object
+     properties:
+      numPartitions:
+        description: 'Number of partitions'
+        type: integer
+      cleanUpPolicy:
+        description: 'cleanUpPolicy is based on cleanup.policy defined in the Kafka Documentation [15]. '
+        type: string
+      compressionType: 
+        description: ' compressionType is based on compression.type defined in the Kafka Documentation [15] .'
+        type: string
+      retentionBytes:
+        description: ' retentionBytes is based on retention.bytes defined in the Kafka Documentation [15] . This attribute is applicable ONLY when cleanUpPolicy is set to DELETE'
+        type: integer
+      retentionMs:
+        description: ' retentionMs is based on retention.ms defined in the Kafka Documentation [15] . This attribute is applicable ONLY when cleanUpPolicy is set to DELETE'
+        type: integer
+     required: [“cleanUpPolicy“, “compressionType“]    

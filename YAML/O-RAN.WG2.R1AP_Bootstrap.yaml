@@ -1,0 +1,69 @@
+openapi: 3.0.3
+info:
+  title: 'BootStrap'
+  version: 1.0.0-alpha.1
+  description: |
+    API for BootStrap service.
+    © 2024, O-RAN ALLIANCE.
+    All rights reserved.
+externalDocs:
+  description: 'O-RAN.WG2.R1AP-v06.00'
+  url: 'https://www.o-ran.org/specifications'
+servers:
+  - url: '{apiRoot}/bootstrap/v1/'
+    variables:
+      apiRoot:
+        description: 'apiRoot as defined in clause 5.3 in O-RAN.WG2.R1AP'
+        default: 'https://example.com'
+paths:
+  /bootstrap-info:
+    get:
+      description: 'To discover the entry points into Service management and exposure '
+      responses:
+        '200':
+          description: '.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BootstrapInformation'
+        '400':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/400'
+        '401':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/401'
+        '403':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/403'
+        '404':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/404'
+        '429':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/429'
+        '500':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/500'
+        '502':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/502'
+        '503':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/503'
+components:
+  schemas:
+    BootstrapInformation:
+      type: object
+      properties:
+        apiEndpoints:
+          type: array
+          items:
+            $ref: “#/components/schemas/ApiEndpointInformation“
+    ApiEndpointInformation:
+      type: object
+      properties:
+        apiName:
+          type: string
+          description: Name of the API (“service-apis“ or “published-apis“)
+        tokenEndpoint:
+          $ref: “TS29122_CAPIF_publish_Service_API.yaml#/components/schemas/InterfaceDescription“
+          description: “Token endpoint shall be provided if the API requires authorization over OAuth2.0“
+          nullable: true
+        apiEndPoint:
+          $ref: “TS29122_CAPIF_publish_Service_API.yaml#/components/schemas/InterfaceDescription“
+          description: “End point of the API“
+          nullable: true
+    required:
+        - apiName

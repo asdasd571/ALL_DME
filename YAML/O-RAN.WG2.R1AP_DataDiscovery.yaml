@@ -1,0 +1,110 @@
+openapi: 3.0.3
+info:
+  title: 'Data discovery service'
+  version: 2.0.0-alpha.1
+  description: |
+    API for Data discovery service.
+    © 2024, O-RAN ALLIANCE.
+    All rights reserved.
+externalDocs:
+  description: 'O-RAN.WG2.R1AP-v06.00'
+  url: 'https://www.o-ran.org/specifications'
+servers:
+  - url: '{apiRoot}/data-discovery/v2/'
+    variables:
+      apiRoot:
+        description: 'apiRoot as defined in clause 5.3 in O-RAN.WG2.R1AP'
+        default: 'https://example.com'
+paths:
+  /dme-types:
+    get:
+      description: 'To discover the available DME types'
+      parameters:
+        - name: identity-namespace
+          in: query
+          description: 'Identity namespace to match the “namespace“ part of the “dmeTypeId“ attribute'
+          schema:
+            type: string
+        - name: identity-name
+          in: query
+          description: 'Identity name to match the “name“ part of the “dmeTypeId“ attribute.'
+          schema:
+            type: string
+        - name: data-category
+          in: query
+          description: 'Set of data category entries, all of which to match entries of the “dataCategory“ attribute.'
+          schema:
+            type: array
+            explode: false
+            items:
+              type: string
+      responses:
+        '200':
+          description: 'The response body contains the result of the search over the list of registered APIs.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: 'O-RAN.WG2.R1AP_DataRegistration.yaml#/components/schemas/DmeTypeRelatedCapabilities'        
+        '400':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/400'
+        '401':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/401'
+        '403':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/403'
+        '404':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/404'
+        '406':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/406'
+        '414':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/414'
+        '429':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/429'
+        '500':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/500'
+        '502':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/502'
+        '503':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/503'
+  /dme-types/{dmeTypeId}:
+    get:
+      description: To obtain information about an individual DME type.
+      parameters:
+        - name: dmeTypeId
+          in: path
+          required: true
+          schema:
+           $ref: '#/components/schemas/dmeTypeId'
+      responses:
+        '200':
+          description: The response body contains information about the DME type.
+          content:
+            application/json:
+              schema:
+                $ref: 'O-RAN.WG2.R1AP_DataRegistration.yaml#/components/schemas/DmeTypeRelatedCapabilities'
+        '400':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/400'
+        '401':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/401'
+        '403':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/403'
+        '404':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/404'
+        '406':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/406'
+        '414':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/414'
+        '429':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/429'
+        '500':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/500'
+        '502':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/502'
+        '503':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/503'
+components:
+  schemas:
+   dmeTypeId:
+     type: string
+     description: 'The DmeTypeId is constructed based on the three parts separated by “:“ (colon) {dmeTypeId} = {namespace}:{name}:{version}. See O-RAN.WG2.R1AP_DataRegistration.yaml#/components/schemas/DmeTypeIdStruct for the definition of “namespace“, “name“ and “version“.'

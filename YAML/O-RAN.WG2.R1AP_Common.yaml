@@ -1,0 +1,128 @@
+
+openapi: 3.0.3
+info:
+  title: 'R1 Common definitions'
+  version: 1.0.0
+  description: |
+    R1 Common definitions - O-RAN.WG2.R1AP_Common.yaml.
+    © 2024, O-RAN ALLIANCE.
+    All rights reserved.
+externalDocs:
+  description: 'O-RAN.WG2.R1AP-v06.00'
+  url: 'https://www.o-ran.org/specifications'
+paths: {}
+components:
+  schemas:
+    Uri:
+      description: 'A string formatted according to IETF RFC 3986 [8].'
+      type: string
+    ProblemDetails:
+      description: 'A problem detail to carry details in an HTTP response according to RFC 7807'
+      type: object
+      properties:
+        type:
+          description: 'a URI reference according to IETF RFC 3986 that identifies the problem type'
+          type: string
+        title:
+          description: 'human-readable summary of the problem type'
+          type: string
+        status:
+          description: 'the HTTP status code'
+          type: number
+        detail:
+          description: 'human-readable explanation '
+          type: string
+        instance:
+          description: 'URI reference that identifies the specific occurrence of the problem'
+          type: string
+  responses:
+   '400':
+      description: 'Bad Request'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+   '401':
+      description: 'Unauthorized'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+   '403':
+      description: 'Forbidden'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+   '404':
+      description: 'Not Found'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+   '405':
+      description: 'Method Not Allowed'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+   '406':
+      description: 'Not Acceptable'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+   '409':
+      description: 'Conflict'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+   '411':
+      description: 'Length Required'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+   '413':
+      description: 'Payload Too Large'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+   '414':
+      description: 'URI Too Large'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+   '415':
+      description: 'Unsupported Media Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+   '429':
+      description: 'Too Many Requests'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+   '500':
+      description: 'Internal Server Error'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+   '502':
+      description: 'Bad Gateway'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+   '503':
+      description: 'Service Unavailable'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'

@@ -1,0 +1,199 @@
+openapi: 3.0.3
+info:
+  title: 'Data offer service'
+  version: 1.0.0-alpha.1
+  description: |
+    API for Data offer service.
+    © 2024, O-RAN ALLIANCE.
+    All rights reserved.
+externalDocs:
+  description: 'O-RAN.WG2.R1AP-v06.00'
+  url: 'https://www.o-ran.org/specifications'
+servers:
+  - url: '{apiRoot}/data-offer/v1/{apiConsumerId}'
+    variables:
+      apiRoot:
+        description: 'apiRoot as defined in clause 5.3 in O-RAN.WG2.R1AP'
+        default: 'https://example.com'
+      apiConsumerId:
+        description: 'Identifier of API Consumer'
+        default: ''
+paths:
+  '/offers':
+    post:
+      description: 'Allows to create a new data offer'
+      tags:
+      - All data offers 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataOfferInfo'
+      responses:
+        '201':
+          description: 'Success case 201 created'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataOfferInfo'
+          headers:
+            Location:
+              description: 'Contains the URI of the newly created resource'
+              required: true
+              schema:
+               type: string
+        '400':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/400'
+        '401':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/401'
+        '403':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/403'
+        '404':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/404'
+        '405':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/405'
+        '409':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/409'
+        '413':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/413'
+        '415':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/415'
+        '429':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/429'
+        '500':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/500'
+        '502':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/502'
+        '503':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/503'
+      callbacks:
+        DataAvailabilityNotification:
+          '{$request.body.dataAvailabilityNotificationUri}':
+           post:
+            description: 'Notification on the availability of offered data'
+            requestBody:
+              required: true
+              content:
+                application/json:
+                  schema:
+                    $ref: ' O-RAN.WG2.R1AP_DataAccess.yaml #/components/schemas/DataAvailabilityNotification'
+            responses:
+              '204':
+                description: 'The notification was delivered'
+              '400':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/400'
+              '401':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/401'
+              '403':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/403'
+              '404':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/404'
+              '429':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/429'
+              '500':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/500'
+              '502':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/502'
+              '503':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/503'
+        DataOfferTerminationNotification:
+          '{$request.body.dataOfferTerminationNotificationUri}':
+           post:
+            description: 'Notification on termination of data offer by the API producer'
+            requestBody:
+              required: true
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/DataOfferTerminationNotification'
+            responses:
+              '204':
+                description: 'The notification was delivered'
+              '400':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/400'
+              '401':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/401'
+              '403':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/403'
+              '404':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/404'
+              '429':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/429'
+              '500':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/500'
+              '502':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/502'
+              '503':
+                $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/503'
+  '/offers/{dataOfferId}':
+    parameters:
+      - name: dataOfferId
+        in: path
+        required: true
+        schema:
+          type: string
+    delete:
+      description: 'To delete the data offer'
+      tags:
+      - Individual data offer 
+      responses:
+        '204':
+          description: 'The data offer was deleted.'
+        '400':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/400'
+        '401':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/401'
+        '403':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/403'
+        '404':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/404'
+        '429':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/429'
+        '500':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/500'
+        '502':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/502'
+        '503':
+          $ref: './O-RAN.WG2.R1AP_Common.yaml#/components/responses/503'
+components:
+  schemas:
+   DataOfferInfo:
+     description: 'Information related to a data offer'
+     type: object
+     properties:
+      dataDeliveryMode:
+        $ref: 'O-RAN.WG2.R1AP_DataAccess.yaml#/components/schemas/DataDeliveryMode'
+      dmeTypeId:
+        $ref: './O-RAN.WG2.R1AP_DataDiscovery.yaml#/components/schemas/DmeTypeId'
+      productionJobDefinition:
+        description: 'Job description based on the DME type specific dataProductionSchema'
+        type: object
+      dataDeliveryMethods:
+        type: array
+        items:
+          $ref: ' O-RAN.WG2.R1AP_DataAccess.yaml#/components/schemas/DataDeliveryMethod'
+      dataDeliverySchemaIds:
+        description: 'A delivery schema identifier provided by a Data Producer during the data registration procedure'
+        type: array
+        items:
+          type: string
+      pullDeliveryDetailsHttp:
+        $ref: ' O-RAN.WG2.R1AP_DataAccess.yaml#/components/schemas/PullDeliveryDetailsHttp'
+      dataAvailabilityNotificationUri:
+        $ref: 'O-RAN.WG2.R1AP_Common.yaml#/components/schemas/Uri'
+      dataOfferTerminationNotificationUri:
+        $ref: 'O-RAN.WG2.R1AP_Common.yaml#/components/schemas/Uri'
+      pushDeliveryDetailsHttp:
+        $ref: 'O-RAN.WG2.R1AP_DataAccess.yaml#/components/schemas/PushDeliveryDetailsHttp'
+      streamingConfigurationKafka:
+        $ref: 'O-RAN.WG2.R1AP_DataAccess.yaml#/components/schemas/StreamingConfigurationKafka'
+     required: [ “dataDeliveryMode“, “dmeTypeId“, “productionJobDefinition“, “ dataDeliveryMethods “, “dataDeliverySchemaIds“, “dataOfferTerminationNotificationUri“]
+   DataOfferTerminationNotification:
+    description: 'Termination of a data offer by the API producer'
+    type: object
+    properties:
+      dataOfferId:
+        description: 'Identifies the deleted data offer'
+        type: string
+    required: [“dataOfferId“]
